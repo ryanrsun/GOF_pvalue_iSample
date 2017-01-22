@@ -1,0 +1,910 @@
+pchisq(b1, df=1)
+pchisq(b1, df=1)^3
+head(hi)
+head(z)
+head(Z)
+mean(Z[,1])
+var(Z[,1])
+b1
+sqrt(b1)
+ell = function(x) {#
+	if (x[1]^2 <= b1 & x[2]^2 <= b1 & x[3]^2 <= b1) {#
+		return (1)#
+	} else {#
+		return (0)#
+	}#
+}#
+#
+hi = apply(Z, 1, ell)#
+sum(hi) / n
+cdf_chisq(a=0, b=b1, lambda=l1) * cdf_chisq(a=0, b=b1, lambda=l2)  * cdf_chisq(a=b1, b=b2, lambda=l3) + #
+	cdf_chisq(a=0, b=b1, lambda=l1) * cdf_chisq(a=0, b=b1, lambda=l3)  * cdf_chisq(a=b1, b=b2, lambda=l2) + #
+	cdf_chisq(a=0, b=b1, lambda=l2) * cdf_chisq(a=0, b=b1, lambda=l3)  * cdf_chisq(a=b1, b=b2, lambda=l1)
+u = c(3,2,1)
+sort(u)
+sort(abs(u))
+u = c(-3, 2, -1)
+sort(abs(u))
+cdf_chisq <- function(a, b, lambda) {#
+	pchisq(b, df=1, ncp=lambda) - pchisq(a, df=1, ncp=lambda)#
+}#
+#
+my_func <- function(bounds, mu_vec) {#
+	b1 = bounds[1]^2; b2 = bounds[2]^2; b3=bounds[3]^2#
+	l1 = mu_vec[1]^2; l2 = mu_vec[2]^2; l3 = mu_vec[3]^2#
+	cdf_chisq(a=0, b=b1, lambda=l1) * cdf_chisq(a=b1, b=b2, lambda=l2) * cdf_chisq(a=b2, b=b3, lambda=l3) + #
+	cdf_chisq(a=0, b=b1, lambda=l1) * cdf_chisq(a=b1, b=b2, lambda=l3) * cdf_chisq(a=b2, b=b3, lambda=l2) + #
+	cdf_chisq(a=0, b=b1, lambda=l2) * cdf_chisq(a=b1, b=b2, lambda=l1) * cdf_chisq(a=b2, b=b3, lambda=l3) + #
+	cdf_chisq(a=0, b=b1, lambda=l2) * cdf_chisq(a=b1, b=b2, lambda=l3) * cdf_chisq(a=b2, b=b3, lambda=l1) + #
+	cdf_chisq(a=0, b=b1, lambda=l3) * cdf_chisq(a=b1, b=b2, lambda=l2) * cdf_chisq(a=b2, b=b3, lambda=l1) + #
+	cdf_chisq(a=0, b=b1, lambda=l3) * cdf_chisq(a=b1, b=b2, lambda=l1) * cdf_chisq(a=b2, b=b3, lambda=l2) +#
+	cdf_chisq(a=0, b=b1, lambda=l1) * cdf_chisq(a=b1, b=b2, lambda=l2) * cdf_chisq(a=b1, b=b2, lambda=l3) + #
+	cdf_chisq(a=0, b=b1, lambda=l2) * cdf_chisq(a=b1, b=b2, lambda=l1) * cdf_chisq(a=b1, b=b2, lambda=l3) + #
+	cdf_chisq(a=0, b=b1, lambda=l3) * cdf_chisq(a=b1, b=b2, lambda=l1) * cdf_chisq(a=b1, b=b2, lambda=l2) + #
+	cdf_chisq(a=0, b=b1, lambda=l1) * cdf_chisq(a=0, b=b1, lambda=l2)  * cdf_chisq(a=b1, b=b2, lambda=l3) + #
+	cdf_chisq(a=0, b=b1, lambda=l1) * cdf_chisq(a=0, b=b1, lambda=l3)  * cdf_chisq(a=b1, b=b2, lambda=l2) + #
+	cdf_chisq(a=0, b=b1, lambda=l2) * cdf_chisq(a=0, b=b1, lambda=l3)  * cdf_chisq(a=b1, b=b2, lambda=l1) + #
+	cdf_chisq(a=0, b=b1, lambda=l1) * cdf_chisq(a=0, b=b1, lambda=l2)  * cdf_chisq(a=b2, b=b3, lambda=l3) + #
+	cdf_chisq(a=0, b=b1, lambda=l1) * cdf_chisq(a=0, b=b1, lambda=l3)  * cdf_chisq(a=b2, b=b2, lambda=l2) + #
+	cdf_chisq(a=0, b=b1, lambda=l2) * cdf_chisq(a=0, b=b1, lambda=l3)  * cdf_chisq(a=b2, b=b3, lambda=l1) + #
+	cdf_chisq(a=0, b=b1, lambda=l1) * cdf_chisq(a=0, b=b1, lambda=l2) * cdf_chisq(a=0, b=b1, lambda=l3)#
+}
+# signal in one test statistic (should be less than 0.95 obviously)?#
+mu_vec <- c(0,0,0)#
+my_func(bounds=HC_z_bounds, mu_vec=mu_vec)
+# The p-value of observed h=4.55605 with d=3 is 0.05#
+h <- 4.55605#
+d <- 3#
+i_vec <- 1:d#
+HC_p_bounds <- ((2*i_vec+h^2)/d - sqrt((2*i_vec/d+h^2/d)^2 - 4*i_vec^2/d^2 - 4*i_vec^2*h^2/d^3))/(2*(1+h^2/d))#
+HC_z_bounds <- qnorm(1-HC_p_bounds/2)#
+HC_z_bounds <- sort(HC_z_bounds, decreasing=F)#
+GHC(HC_z_bounds, cor_mat=diag(3))
+cdf_chisq <- function(a, b, lambda) {#
+	pchisq(b, df=1, ncp=lambda) - pchisq(a, df=1, ncp=lambda)#
+}#
+#
+my_func <- function(bounds, mu_vec) {#
+	b1 = bounds[1]^2; b2 = bounds[2]^2; b3=bounds[3]^2#
+	l1 = mu_vec[1]^2; l2 = mu_vec[2]^2; l3 = mu_vec[3]^2#
+	cdf_chisq(a=0, b=b1, lambda=l1) * cdf_chisq(a=b1, b=b2, lambda=l2) * cdf_chisq(a=b2, b=b3, lambda=l3) + #
+	cdf_chisq(a=0, b=b1, lambda=l1) * cdf_chisq(a=b1, b=b2, lambda=l3) * cdf_chisq(a=b2, b=b3, lambda=l2) + #
+	cdf_chisq(a=0, b=b1, lambda=l2) * cdf_chisq(a=b1, b=b2, lambda=l1) * cdf_chisq(a=b2, b=b3, lambda=l3) + #
+	cdf_chisq(a=0, b=b1, lambda=l2) * cdf_chisq(a=b1, b=b2, lambda=l3) * cdf_chisq(a=b2, b=b3, lambda=l1) + #
+	cdf_chisq(a=0, b=b1, lambda=l3) * cdf_chisq(a=b1, b=b2, lambda=l2) * cdf_chisq(a=b2, b=b3, lambda=l1) + #
+	cdf_chisq(a=0, b=b1, lambda=l3) * cdf_chisq(a=b1, b=b2, lambda=l1) * cdf_chisq(a=b2, b=b3, lambda=l2) +#
+	cdf_chisq(a=0, b=b1, lambda=l1) * cdf_chisq(a=b1, b=b2, lambda=l2) * cdf_chisq(a=b1, b=b2, lambda=l3) + #
+	cdf_chisq(a=0, b=b1, lambda=l2) * cdf_chisq(a=b1, b=b2, lambda=l1) * cdf_chisq(a=b1, b=b2, lambda=l3) + #
+	cdf_chisq(a=0, b=b1, lambda=l3) * cdf_chisq(a=b1, b=b2, lambda=l1) * cdf_chisq(a=b1, b=b2, lambda=l2) + #
+	cdf_chisq(a=0, b=b1, lambda=l1) * cdf_chisq(a=0, b=b1, lambda=l2)  * cdf_chisq(a=b1, b=b2, lambda=l3) + #
+	cdf_chisq(a=0, b=b1, lambda=l1) * cdf_chisq(a=0, b=b1, lambda=l3)  * cdf_chisq(a=b1, b=b2, lambda=l2) + #
+	cdf_chisq(a=0, b=b1, lambda=l2) * cdf_chisq(a=0, b=b1, lambda=l3)  * cdf_chisq(a=b1, b=b2, lambda=l1) + #
+	cdf_chisq(a=0, b=b1, lambda=l1) * cdf_chisq(a=0, b=b1, lambda=l2)  * cdf_chisq(a=b2, b=b3, lambda=l3) + #
+	cdf_chisq(a=0, b=b1, lambda=l1) * cdf_chisq(a=0, b=b1, lambda=l3)  * cdf_chisq(a=b2, b=b2=3, lambda=l2) + #
+	cdf_chisq(a=0, b=b1, lambda=l2) * cdf_chisq(a=0, b=b1, lambda=l3)  * cdf_chisq(a=b2, b=b3, lambda=l1) + #
+	cdf_chisq(a=0, b=b1, lambda=l1) * cdf_chisq(a=0, b=b1, lambda=l2) * cdf_chisq(a=0, b=b1, lambda=l3)#
+}
+cdf_chisq <- function(a, b, lambda) {#
+	pchisq(b, df=1, ncp=lambda) - pchisq(a, df=1, ncp=lambda)#
+}#
+#
+my_func <- function(bounds, mu_vec) {#
+	b1 = bounds[1]^2; b2 = bounds[2]^2; b3=bounds[3]^2#
+	l1 = mu_vec[1]^2; l2 = mu_vec[2]^2; l3 = mu_vec[3]^2#
+	cdf_chisq(a=0, b=b1, lambda=l1) * cdf_chisq(a=b1, b=b2, lambda=l2) * cdf_chisq(a=b2, b=b3, lambda=l3) + #
+	cdf_chisq(a=0, b=b1, lambda=l1) * cdf_chisq(a=b1, b=b2, lambda=l3) * cdf_chisq(a=b2, b=b3, lambda=l2) + #
+	cdf_chisq(a=0, b=b1, lambda=l2) * cdf_chisq(a=b1, b=b2, lambda=l1) * cdf_chisq(a=b2, b=b3, lambda=l3) + #
+	cdf_chisq(a=0, b=b1, lambda=l2) * cdf_chisq(a=b1, b=b2, lambda=l3) * cdf_chisq(a=b2, b=b3, lambda=l1) + #
+	cdf_chisq(a=0, b=b1, lambda=l3) * cdf_chisq(a=b1, b=b2, lambda=l2) * cdf_chisq(a=b2, b=b3, lambda=l1) + #
+	cdf_chisq(a=0, b=b1, lambda=l3) * cdf_chisq(a=b1, b=b2, lambda=l1) * cdf_chisq(a=b2, b=b3, lambda=l2) +#
+	cdf_chisq(a=0, b=b1, lambda=l1) * cdf_chisq(a=b1, b=b2, lambda=l2) * cdf_chisq(a=b1, b=b2, lambda=l3) + #
+	cdf_chisq(a=0, b=b1, lambda=l2) * cdf_chisq(a=b1, b=b2, lambda=l1) * cdf_chisq(a=b1, b=b2, lambda=l3) + #
+	cdf_chisq(a=0, b=b1, lambda=l3) * cdf_chisq(a=b1, b=b2, lambda=l1) * cdf_chisq(a=b1, b=b2, lambda=l2) + #
+	cdf_chisq(a=0, b=b1, lambda=l1) * cdf_chisq(a=0, b=b1, lambda=l2)  * cdf_chisq(a=b1, b=b2, lambda=l3) + #
+	cdf_chisq(a=0, b=b1, lambda=l1) * cdf_chisq(a=0, b=b1, lambda=l3)  * cdf_chisq(a=b1, b=b2, lambda=l2) + #
+	cdf_chisq(a=0, b=b1, lambda=l2) * cdf_chisq(a=0, b=b1, lambda=l3)  * cdf_chisq(a=b1, b=b2, lambda=l1) + #
+	cdf_chisq(a=0, b=b1, lambda=l1) * cdf_chisq(a=0, b=b1, lambda=l2)  * cdf_chisq(a=b2, b=b3, lambda=l3) + #
+	cdf_chisq(a=0, b=b1, lambda=l1) * cdf_chisq(a=0, b=b1, lambda=l3)  * cdf_chisq(a=b2, b=b3, lambda=l2) + #
+	cdf_chisq(a=0, b=b1, lambda=l2) * cdf_chisq(a=0, b=b1, lambda=l3)  * cdf_chisq(a=b2, b=b3, lambda=l1) + #
+	cdf_chisq(a=0, b=b1, lambda=l1) * cdf_chisq(a=0, b=b1, lambda=l2) * cdf_chisq(a=0, b=b1, lambda=l3)#
+}
+# The p-value of observed h=4.55605 with d=3 is 0.05#
+h <- 4.55605#
+d <- 3#
+i_vec <- 1:d#
+HC_p_bounds <- ((2*i_vec+h^2)/d - sqrt((2*i_vec/d+h^2/d)^2 - 4*i_vec^2/d^2 - 4*i_vec^2*h^2/d^3))/(2*(1+h^2/d))#
+HC_z_bounds <- qnorm(1-HC_p_bounds/2)#
+HC_z_bounds <- sort(HC_z_bounds, decreasing=F)#
+GHC(HC_z_bounds, cor_mat=diag(3))#
+#
+# What is the probability of staying inside the bounds when there is#
+# signal in one test statistic (should be less than 0.95 obviously)?#
+mu_vec <- c(0,0,0)#
+my_func(bounds=HC_z_bounds, mu_vec=mu_vec)
+eigen(ell)
+ell = diag(x=(0.7), nrow=5, ncol=5)
+ell2 = matrix(data=0.3, nrow=5, ncol=5)
+ell
+ell2
+hi = ell + ell2
+hi
+eigen(ell)
+eigen(ell2)
+ell
+hi
+svd(hi)
+svd(hi)$u %*% diag(1/svd(hi)$d) %*% t(svd(hi)$v)
+solve(hi)
+4.555/4
+sqrt(1.14)
+1.48 / 1.07
+1.65 / 1.07
+0.6/1.07
+sig_mat = matrix(data=1, nrow=5, ncol=5)
+sig_mat[1,2] = sig_mat[2,1] = 0.01912024
+sig_mat[1,3] = sig_mat[3,1] = 0.15498892
+sig_mat[2,3] = sig_mat[3,2] = 0.12003188
+sig_mat[4,1] = sig_mat[1,4] = 0.21301551
+sig_mat[4,2] = sig_mat[2,4] = 0.14181763
+sig_mat[4,3] = sig_mat[3,4] = 0.21795605
+sig_mat[5,1] = sig_mat[1,5] = 0.12711216
+sig_mat[5,2] = sig_mat[2,5] = 0.23954297
+sig_mat[5,3] = sig_mat[3,5] = 0.17157866
+sig_mat[5,4] = sig_mat[4,5] = 0.10482516
+sig_mat
+x = c(0.18139133998473769, 1.0144614729711996, )
+x = c(0.13799484796772246, 1.6623175007799811, 1.4255506035994683, -0.94300515124546624, 0.50461767093834375)
+t(x) %*% solve(sig_mat) %*% x
+x = c(-0.81587095101291374, 0.84944160689453418, 0.46983365084466266, -0.91345173630257648, -0.052746490344673796)
+t(x) %*% solve(sig_mat) %*% x
+solve(sig_mat)
+ell = svd(sig_mat)
+sqrt_sig = ell%U %*%diag(sqrt(ell$d)) %*% t(ell$V)
+sqrt_sig = ell%U %*% diag(sqrt(ell$d)) %*% t(ell$V)
+sqrt_sig = ell$U %*% diag(sqrt(ell$d)) %*% t(ell$V)
+ell$d
+ell$U
+sqrt_sig = ell$u %*% diag(sqrt(ell$d)) %*% t(ell$v)
+sqrt_sig
+sqrt_sig %*% t(siqrt_sig)
+sqrt_sig %*% t(sqrt_sig)
+sig_mat
+ell$u
+t(ell$v)
+ell$v
+ell$u
+sig_mat
+library(mvtnorm)
+mysamp = rmvnorm(n=100000, sigma=sig_mat)
+mysamp = rmvnorm(n=100000, mean=rep(0,5))
+tsamp = mysamp %*% sqrt_sig
+cor(tsamp)
+solve(sig_mat)
+x = c(0.52103950551424205, 1.0897289066864122, 0.52165246410652977, 0.87343635518288731, 2.2881952233620355)
+t(x) %*% solve(sig_mat) %*% x
+exp(-3.887/2)
+x = c(-0.31690742867427568, 0.80846721616816852, 0.43597832873816889, -0.19757291994025625, -1.418637771450967)
+t(x) %*% sig_mat %*% x
+t(x) %*% solve(sig_mat) %*% x
+1 + 3.887395/4
+1.971849^(-4.5)
+4^2.5 * gamma(2) / (gamma(4.5) * 2^2.5)
+0.036399608706776936/0.012317802957095867
+2.955041 * 0.48632963706079407
+ell = rchisq(n=10000, df=5)
+mean(ell)
+var(ell)
+sd(ell)
+ell = rchisq(n=10000, df=4)
+mean(ell)
+sd(ell)
+# Give it the bounds and correlation matrix#
+setwd('/users/ryansun/documents/research/paper2/software/GOF_pvalue_IS')#
+boundaryPts <- read.table('bounds5.txt')#
+cor_vec <- read.table('sig_mat5.txt')#
+sig_mat <- matrix(data=1, nrow=5, ncol=5)#
+counter <- 1#
+for (i in 2:5) {#
+	for (j in 1:(i-1)) {#
+		sig_mat[i, j] <- cor_vec[counter]#
+		sig_mat[j, i] <- cor_vec[counter]#
+		counter <- counter + 1#
+	}#
+}
+boundaryPts <- read.table('bounds5.txt')
+boundaryPts <- read.table('bounds5.txt')
+boundaryPts
+boundaryPts <- as.numeric(boundaryPts)
+boundaryPts <- unlist(boundaryPts)
+boundaryPts
+# Give it the bounds and correlation matrix#
+setwd('/users/ryansun/documents/research/paper2/software/GOF_pvalue_IS')#
+boundaryPts <- read.table('bounds5.txt')#
+boundaryPts <- unlist(boundaryPts)#
+cor_vec <- read.table('sig_mat5.txt')#
+sig_mat <- matrix(data=1, nrow=5, ncol=5)#
+counter <- 1#
+for (i in 2:5) {#
+	for (j in 1:(i-1)) {#
+		sig_mat[i, j] <- cor_vec[counter]#
+		sig_mat[j, i] <- cor_vec[counter]#
+		counter <- counter + 1#
+	}#
+}
+cor_vec <- read.table('sigmat5.txt')
+sig_mat <- matrix(data=1, nrow=5, ncol=5)#
+counter <- 1#
+for (i in 2:5) {#
+	for (j in 1:(i-1)) {#
+		sig_mat[i, j] <- cor_vec[counter]#
+		sig_mat[j, i] <- cor_vec[counter]#
+		counter <- counter + 1#
+	}#
+}
+cor_vec
+# Generate sample from multivariate t#
+n <- 10000#
+sample <- rmvt(n=n, sigma=sig_mat)
+sig_mat
+cor_vec[counter, 1]
+sig_mat <- matrix(data=1, nrow=5, ncol=5)#
+counter <- 1#
+for (i in 2:5) {#
+	for (j in 1:(i-1)) {#
+		sig_mat[i, j] <- cor_vec[counter, 1]#
+		sig_mat[j, i] <- cor_vec[counter, 1]#
+		counter <- counter + 1#
+	}#
+}
+sig_mat
+cor_vec
+# Generate sample from multivariate t#
+n <- 10000#
+nu <- 4#
+norm_samp <- rmvnorm(n=n, sigma=sig_mat)#
+chisq_samp <- rchisq(n=n, df=nu)
+head(norm_samp)
+head(chisq_samp)
+ell = norm_samp / chisq_samp
+head(el)
+head(ell)
+0.28248992/2.75
+0.7364126/2.75
+0.35351703/2.75
+2.23542506/0.9819153
+1.1684831/.98
+1.5654966/4.4729174
+# Generate sample from multivariate t#
+n <- 10000#
+nu <- 4#
+norm_samp <- rmvnorm(n=n, sigma=sig_mat)#
+chisq_samp <- rchisq(n=n, df=nu)#
+chisq_samp <- sqrt(chisq_samp/nu)#
+t_samp <- norm_samp / chisq_samp
+head(t_samp)
+apply(t_samp, 2, mean)
+sample <- rmvt(n=n, sigma=sig_mat, df=nu)
+apply(sample, 2, mean)
+cov(t_samp)
+cov(t_samp)
+cov(sample)
+# Generate sample from multivariate t#
+n <- 100000#
+nu <- 4#
+norm_samp <- rmvnorm(n=n, sigma=sig_mat)#
+chisq_samp <- rchisq(n=n, df=nu)#
+chisq_samp <- sqrt(chisq_samp/nu)#
+t_samp <- norm_samp / chisq_samp#
+#
+sample <- rmvt(n=n, sigma=sig_mat, df=nu)
+cov(t_samp)
+cov(sample)
+# Generate sample from multivariate t#
+n <- 500000#
+nu <- 4#
+norm_samp <- rmvnorm(n=n, sigma=sig_mat)#
+chisq_samp <- rchisq(n=n, df=nu)#
+chisq_samp <- sqrt(chisq_samp/nu)#
+t_samp <- norm_samp / chisq_samp#
+#
+sample <- rmvt(n=n, sigma=sig_mat, df=nu)
+cov(t_samp)
+cov(sample)
+sig_mat
+?rmvt
+2*sig_mat
+# Generate sample from multivariate t#
+n <- 1000000#
+nu <- 4#
+norm_samp <- rmvnorm(n=n, sigma=sig_mat)#
+chisq_samp <- rchisq(n=n, df=nu)#
+chisq_samp <- sqrt(chisq_samp/nu)#
+t_samp <- norm_samp / chisq_samp#
+#
+sample <- rmvt(n=n, sigma=sig_mat, df=nu)#
+#
+2*sig_mat#
+cov(t_samp)#
+cov(sample)
+const_factor <- nu^(5/2) * Gamma(nu/2) / (Gamma((nu+5)/2) * 2^(5/2))
+nu
+gamma(5)
+const_factor <- nu^(5/2) * gamma(nu/2) / (gamma((nu+5)/2) * 2^(5/2))
+const_factor
+# Calculate weights function#
+calc_weights <- function(sample, const_factor, sig_inv) {#
+	vector_prod <- t(sample) %*% sig_inv %*% sample#
+	numerator <- exp(-vector_prod / 2)#
+	denominator <- (1+vector_product/nu)^(-(5+nu)/2)#
+	const_factor * numerator / denominator#
+}#
+#
+const_factor <- nu^(5/2) * gamma(nu/2) / (gamma((nu+5)/2) * 2^(5/2))#
+temp_x <- runif(n=5, min=-2, max=2)#
+dmvnorm(x=temp_x, sigma=sig_mat) / dmvt(x=temp_x, sigma=sig_mat, df=nu)
+# Calculate weights function#
+calc_weights <- function(sample, const_factor, sig_inv) {#
+	vector_prod <- t(sample) %*% sig_inv %*% sample#
+	numerator <- exp(-vector_prod / 2)#
+	denominator <- (1+vector_product/nu)^(-(5+nu)/2)#
+	const_factor * numerator / denominator#
+}#
+#
+const_factor <- nu^(5/2) * gamma(nu/2) / (gamma((nu+5)/2) * 2^(5/2))#
+temp_x <- runif(n=5, min=-2, max=2)#
+dmvnorm(x=temp_x, sigma=sig_mat) / dmvt(x=temp_x, sigma=sig_mat, df=nu)
+# Calculate weights function#
+calc_weights <- function(sample, const_factor, sig_inv) {#
+	vector_prod <- t(sample) %*% sig_inv %*% sample#
+	numerator <- exp(-vector_prod / 2)#
+	denominator <- (1+vector_product/nu)^(-(5+nu)/2)#
+	const_factor * numerator / denominator#
+}#
+#
+const_factor <- nu^(5/2) * gamma(nu/2) / (gamma((nu+5)/2) * 2^(5/2))#
+temp_x <- runif(n=5, min=-2, max=2)#
+dmvnorm(x=temp_x, sigma=sig_mat) / dmvt(x=temp_x, sigma=sig_mat, df=nu)
+const_factor <- nu^(5/2) * gamma(nu/2) / (gamma((nu+5)/2) * 2^(5/2))#
+temp_x <- runif(n=5, min=-2, max=2)#
+dmvnorm(x=temp_x, sigma=sig_mat) / dmvt(x=temp_x, sigma=sig_mat, df=nu)#
+calc_weights(temp_x, const_factor, solve(sig_mat))
+# Calculate weights function#
+calc_weights <- function(sample, const_factor, sig_inv) {#
+	vector_prod <- t(sample) %*% sig_inv %*% sample#
+	numerator <- exp(-vector_prod / 2)#
+	denominator <- (1+vector_prod/nu)^(-(5+nu)/2)#
+	const_factor * numerator / denominator#
+}#
+#
+const_factor <- nu^(5/2) * gamma(nu/2) / (gamma((nu+5)/2) * 2^(5/2))#
+temp_x <- runif(n=5, min=-2, max=2)#
+dmvnorm(x=temp_x, sigma=sig_mat) / dmvt(x=temp_x, sigma=sig_mat, df=nu)#
+calc_weights(temp_x, const_factor, solve(sig_mat))
+dmvnorm(x=temp_x, sigma=sig_mat)
+(2*pi)^(-2.5) * det(sig_mat)^(-0.5) * exp(-0.5*t(sample) %*% sig_inv %*% sample)
+(2*pi)^(-2.5) * det(sig_mat)^(-0.5) * exp(-0.5*t(sample) %*% solve(sig_mat) %*% sample)
+dmvnorm(x=temp_x, sigma=sig_mat) #
+(2*pi)^(-2.5) * det(sig_mat)^(-0.5) * exp(-0.5*t(temp_x) %*% solve(sig_mat) %*% sample temp_x
+dmvnorm(x=temp_x, sigma=sig_mat) #
+(2*pi)^(-2.5) * det(sig_mat)^(-0.5) * exp(-0.5*t(temp_x) %*% solve(sig_mat) %*% temp_x
+(2*pi)^(-2.5) * det(sig_mat)^(-0.5) * exp(-0.5*t(temp_x) %*% solve(sig_mat) %*% temp_x)
+(2*pi)^(-2.5) * det(sig_mat)^(-0.5) * exp(-0.5*t(temp_x) %*% solve(sig_mat) %*% temp_x)
+dmvnorm(x=temp_x, sigma=sig_mat) #
+(2*pi)^(-2.5) * det(sig_mat)^(-0.5) * exp(-0.5*t(temp_x) %*% solve(sig_mat) %*% temp_x)
+dmvt(x=temp_x, sigma=sig_mat, df=nu)#
+gamma((5+nu)/2) * (1+t(temp_x) %*% solve(sig_mat) %*% temp_x / nu)^(-(nu+5)/2) / #
+	( gamma(nu/2) * nu^(5/2) * pi^(5/2) * det(sig_mat)^0.5)
+?dmvt
+dmvt(x=temp_x, sigma=sig_mat, df=nu, log=F)#
+gamma((5+nu)/2) * (1+t(temp_x) %*% solve(sig_mat) %*% temp_x / nu)^(-(nu+5)/2) / #
+	( gamma(nu/2) * nu^(5/2) * pi^(5/2) * det(sig_mat)^0.5)
+const_factor <- nu^(5/2) * gamma(nu/2) / (gamma((nu+5)/2) * 2^(5/2))#
+temp_x <- runif(n=5, min=-2, max=2)#
+dmvnorm(x=temp_x, sigma=sig_mat) / dmvt(x=temp_x, sigma=sig_mat, df=nu, log=F)#
+calc_weights(temp_x, const_factor, solve(sig_mat))
+# Generate sample from independent normals#
+n <- 10000#
+nu <- 4#
+MC_samp <- rmvnorm(n=n, mean=rep(0,5))#
+#
+# sigma^0.5#
+U <- svd(sig_mat)$u#
+d <- svd(sig_mat)$d#
+V <- svd(sig_mat)$v#
+sqrt_sig <- U %*% sqrt(d) %*% t(V)#
+#
+# Transform the sample to have the correct covariance matrix#
+MC_samp <- MC_samp %*% sqrt(sig)
+n <- 10000#
+nu <- 4#
+MC_samp <- rmvnorm(n=n, mean=rep(0,5))#
+#
+# sigma^0.5#
+U <- svd(sig_mat)$u#
+d <- svd(sig_mat)$d#
+V <- svd(sig_mat)$v#
+sqrt_sig <- U %*% diag(sqrt(d)) %*% t(V)#
+#
+# Transform the sample to have the correct covariance matrix#
+MC_samp <- MC_samp %*% sqrt_sig#
+cov(MC_samp)#
+sig_mat
+# Check if in_bounds function#
+# Assumes we just care about upper bounds, and both vectors#
+# are already pre-sorted.#
+# Return 0 if inside bounds.#
+inbounds <- function(sample, bounds) {#
+	if (sum(sample > bounds) == 0) {#
+		return (1)#
+	} else {#
+		return (0)#
+	}#
+}
+inbounds_vec <- apply(MC_samp, 1, inbounds, bounds=boundaryPts)
+sum(inbounds_vec / length(inbounds_vec))
+# Generate sample from independent normals#
+n <- 10000#
+nu <- 4#
+MC_samp <- rmvnorm(n=n, mean=rep(0,5))#
+#
+# sigma^0.5#
+U <- svd(sig_mat)$u#
+d <- svd(sig_mat)$d#
+V <- svd(sig_mat)$v#
+sqrt_sig <- U %*% diag(sqrt(d)) %*% t(V)#
+#
+# Transform the sample to have the correct covariance matrix#
+MC_samp <- MC_samp %*% sqrt_sig#
+cor(MC_samp)#
+sig_mat#
+#
+# Sort and take absolute value#
+MC_samp <- abs(MC_samp)#
+MC_samp <- apply(MC_samp, 1, sort, decreasing=FALSE)#
+#
+# P-value should be around 0.40497#
+inbounds_vec <- apply(MC_samp, 1, inbounds, bounds=boundaryPts)#
+1- sum(inbounds_vec / length(inbounds_vec))
+head(MC_samp)
+dim(MC_samp)
+#########################################################################
+# Do the standard MC sampling#
+#
+# Generate sample from independent normals#
+n <- 10000#
+nu <- 4#
+MC_samp <- rmvnorm(n=n, mean=rep(0,5))#
+#
+# sigma^0.5#
+U <- svd(sig_mat)$u#
+d <- svd(sig_mat)$d#
+V <- svd(sig_mat)$v#
+sqrt_sig <- U %*% diag(sqrt(d)) %*% t(V)#
+#
+# Transform the sample to have the correct covariance matrix#
+MC_samp <- MC_samp %*% sqrt_sig#
+cor(MC_samp)#
+sig_mat
+head(MC_samp)
+# Sort and take absolute value#
+MC_samp <- abs(MC_samp)#
+MC_samp <- t(apply(MC_samp, 1, sort, decreasing=FALSE))
+head(MC_samp)
+# P-value should be around 0.40497#
+inbounds_vec <- apply(MC_samp, 1, inbounds, bounds=boundaryPts)#
+1- sum(inbounds_vec / length(inbounds_vec))
+e standard MC sampling#
+#
+# Generate sample from independent normals#
+n <- 100000#
+nu <- 4#
+MC_samp <- rmvnorm(n=n, mean=rep(0,5))#
+#
+# sigma^0.5#
+U <- svd(sig_mat)$u#
+d <- svd(sig_mat)$d#
+V <- svd(sig_mat)$v#
+sqrt_sig <- U %*% diag(sqrt(d)) %*% t(V)#
+#
+# Transform the sample to have the correct covariance matrix#
+MC_samp <- MC_samp %*% sqrt_sig#
+cor(MC_samp)#
+sig_mat#
+#
+# Sort and take absolute value#
+MC_samp <- abs(MC_samp)#
+MC_samp <- t(apply(MC_samp, 1, sort, decreasing=FALSE))#
+#
+# P-value should be around 0.40497#
+inbounds_vec <- apply(MC_samp, 1, inbounds, bounds=boundaryPts)#
+1- sum(inbounds_vec / length(inbounds_vec))
+# Generate independent normals again to start#
+n <- 100000#
+nu <- 4#
+t_samp <- rmvnorm(n=n, mean=rep(0,5))#
+#
+# Multiply to normal with correct correlation#
+t_samp <- t_samp %*% sqrt_sig#
+#
+# Divide by chi_square to get t#
+chisq_samp <- rchisq(n=n, df=nu)#
+chisq_samp <- sqrt(chisq_samp / nu)#
+t_samp <- t_samp / chisq_samp
+apply(t_samp, 2, mean)
+(nu / (nu-2)) * sig_mat#
+cov(t_samp)
+dim(t_samp)
+solve(sig_mat)
+U %*% solve(diag(d)) %*% t(V)
+# Generate independent normals again to start#
+n <- 100000#
+nu <- 4#
+orig_t_samp <- rmvnorm(n=n, mean=rep(0,5))#
+#
+# Multiply to normal with correct correlation#
+t_samp <- orig_t_samp %*% sqrt_sig#
+#
+# Divide by chi_square to get t#
+chisq_samp <- rchisq(n=n, df=nu)#
+chisq_samp <- sqrt(chisq_samp / nu)#
+t_samp <- t_samp / chisq_samp#
+#
+# Check we got the t sample correctly#
+apply(t_samp, 2, mean)#
+(nu / (nu-2)) * sig_mat#
+cov(t_samp)#
+#
+# Const_factor and sig_inv#
+const_factor <- nu^(5/2) * gamma(nu/2) / (gamma((nu+5)/2) * 2^(5/2))#
+U <- svd(sig_mat)$u#
+d <- svd(sig_mat)$d#
+V <- svd(sig_mat)$v#
+sig_inv <- U %*% sovle(diag(d)) %*% t(V)
+sig_inv <- U %*% solve(diag(d)) %*% t(V)
+# Go through and check inbounds#
+inbounds_vec <- apply(t_samp, 1, inbounds, bounds=boundaryPts)#
+1- sum(inbounds_vec / length(inbounds_vec))#
+weights_vec <- rep(0, n)#
+for (i in 1:n) {#
+	if (inbounds_vec[i] == 0)#
+	{#
+		weights_vec[i] <- calc_weights(orig_t_samp[i, ], const_factor, sig_inv)#
+	}#
+}
+sum(weights_vec)
+sum(weights_vec) / n
+head(weights_vec)
+length(which(weights_vec) > 0)
+length(which(weights_vec>0) )
+length(which(weights_vec>0 & weights_vec<1))
+i = 3
+orig_t_samp[i,]
+const_factor
+calc_weights(orig_t_samp[i, ], const_factor, sig_inv)
+dmvnorm(x=orig_t_samp[i,], sigma=sig_mat) / dmvt(x=orig_t_samp[i,], sigma=sig_mat, df=4, log=F)
+nu
+# Generate independent normals again to start#
+n <- 1000000#
+nu <- 4#
+orig_t_samp <- rmvnorm(n=n, mean=rep(0,5))#
+#
+# Multiply to normal with correct correlation#
+t_samp <- orig_t_samp %*% sqrt_sig#
+#
+# Divide by chi_square to get t#
+chisq_samp <- rchisq(n=n, df=nu)#
+chisq_samp <- sqrt(chisq_samp / nu)#
+t_samp <- t_samp / chisq_samp#
+#
+# Check we got the t sample correctly#
+apply(t_samp, 2, mean)#
+(nu / (nu-2)) * sig_mat#
+cov(t_samp)
+# Const_factor and sig_inv#
+const_factor <- nu^(5/2) * gamma(nu/2) / (gamma((nu+5)/2) * 2^(5/2))#
+U <- svd(sig_mat)$u#
+d <- svd(sig_mat)$d#
+V <- svd(sig_mat)$v#
+sig_inv <- U %*% solve(diag(d)) %*% t(V)#
+#
+# Go through and check inbounds#
+inbounds_vec <- apply(t_samp, 1, inbounds, bounds=boundaryPts)
+1- sum(inbounds_vec / length(inbounds_vec))
+boundaryPts
+weights_vec <- rep(0, n)#
+for (i in 1:n) {#
+	if (inbounds_vec[i] == 0)#
+	{#
+		weights_vec[i] <- calc_weights(orig_t_samp[i, ], const_factor, sig_inv)#
+	}#
+}
+sum(weights_vec) / n
+head(orig_t_samp)
+# Generate independent normals again to start#
+n <- 100000#
+nu <- 4#
+orig_t_samp <- rmvnorm(n=n, mean=rep(0,5))#
+#
+# Multiply to normal with correct correlation#
+orig_t_samp <- orig_t_samp %*% sqrt_sig#
+#
+# Divide by chi_square to get t#
+chisq_samp <- rchisq(n=n, df=nu)#
+chisq_samp <- sqrt(chisq_samp / nu)#
+orig_t_samp <- orig_t_samp / chisq_samp#
+#
+# Check we got the t sample correctly#
+apply(t_samp, 2, mean)#
+(nu / (nu-2)) * sig_mat#
+cov(t_samp)#
+#
+# Const_factor and sig_inv#
+const_factor <- nu^(5/2) * gamma(nu/2) / (gamma((nu+5)/2) * 2^(5/2))#
+U <- svd(sig_mat)$u#
+d <- svd(sig_mat)$d#
+V <- svd(sig_mat)$v#
+sig_inv <- U %*% solve(diag(d)) %*% t(V)
+# Const_factor and sig_inv#
+const_factor <- nu^(5/2) * gamma(nu/2) / (gamma((nu+5)/2) * 2^(5/2))#
+U <- svd(sig_mat)$u#
+d <- svd(sig_mat)$d#
+V <- svd(sig_mat)$v#
+sig_inv <- U %*% solve(diag(d)) %*% t(V)#
+#
+# Sort and take absolute value#
+t_samp <- abs(orig_t_samp)#
+t_samp <- t(apply(t_samp, 1, sort, decreasing=FALSE))#
+#
+# Go through and check inbounds#
+inbounds_vec <- apply(t_samp, 1, inbounds, bounds=boundaryPts)#
+1- sum(inbounds_vec / length(inbounds_vec))
+# Loop to calculate weights.#
+weights_vec <- rep(0, n)#
+for (i in 1:n) {#
+	if (inbounds_vec[i] == 0)#
+	{#
+		weights_vec[i] <- calc_weights(orig_t_samp[i, ], const_factor, sig_inv)#
+	}#
+}#
+sum(weights_vec) / n
+#########################################################################
+# Now try it with importance sampling#
+#
+# Generate independent normals again to start#
+n <- 100000#
+nu <- 4#
+orig_t_samp <- rmvnorm(n=n, mean=rep(0,5))#
+#
+# Multiply to normal with correct correlation#
+orig_t_samp <- orig_t_samp %*% sqrt_sig#
+#
+# Divide by chi_square to get t#
+chisq_samp <- rchisq(n=n, df=nu)#
+chisq_samp <- sqrt(chisq_samp / nu)#
+orig_t_samp <- orig_t_samp / chisq_samp#
+#
+# Check we got the t sample correctly#
+apply(t_samp, 2, mean)#
+(nu / (nu-2)) * sig_mat#
+cov(t_samp)#
+#
+# Const_factor and sig_inv#
+const_factor <- nu^(5/2) * gamma(nu/2) / (gamma((nu+5)/2) * 2^(5/2))#
+U <- svd(sig_mat)$u#
+d <- svd(sig_mat)$d#
+V <- svd(sig_mat)$v#
+sig_inv <- U %*% solve(diag(d)) %*% t(V)#
+#
+# Sort and take absolute value#
+t_samp <- abs(orig_t_samp)#
+t_samp <- t(apply(t_samp, 1, sort, decreasing=FALSE))#
+#
+# Go through and check inbounds#
+inbounds_vec <- apply(t_samp, 1, inbounds, bounds=boundaryPts)#
+1- sum(inbounds_vec / length(inbounds_vec))#
+#
+# Loop to calculate weights.#
+weights_vec <- rep(0, n)#
+for (i in 1:n) {#
+	if (inbounds_vec[i] == 0)#
+	{#
+		weights_vec[i] <- calc_weights(orig_t_samp[i, ], const_factor, sig_inv)#
+	}#
+}#
+#
+# P-value should be around 0.40497#
+sum(weights_vec) / n
+# Read in some bounds and correlation matrix#
+setwd('/users/ryansun/documents/research/paper2/software/GOF_pvalue_IS')#
+boundaryPts <- read.table('bounds5.txt')#
+boundaryPts <- unlist(boundaryPts)#
+cor_vec <- read.table('sigmat5.txt')#
+sig_mat <- matrix(data=1, nrow=5, ncol=5)#
+counter <- 1#
+for (i in 2:5) {#
+	for (j in 1:(i-1)) {#
+		sig_mat[i, j] <- cor_vec[counter, 1]#
+		sig_mat[j, i] <- cor_vec[counter, 1]#
+		counter <- counter + 1#
+	}#
+}#
+#
+# Check if in_bounds function#
+# Assumes we just care about upper bounds, and both vectors#
+# are already pre-sorted.#
+# Return 1 if inside bounds.#
+inbounds <- function(sample, bounds) {#
+	if (sum(sample > bounds) == 0) {#
+		return (1)#
+	} else {#
+		return (0)#
+	}#
+}
+#########################################################################
+# Do the standard MC sampling#
+#
+# Generate sample from independent normals#
+n <- 100000#
+nu <- 4#
+MC_samp <- rmvnorm(n=n, mean=rep(0,5))#
+#
+# sigma^0.5#
+U <- svd(sig_mat)$u#
+d <- svd(sig_mat)$d#
+V <- svd(sig_mat)$v#
+sqrt_sig <- U %*% diag(sqrt(d)) %*% t(V)#
+#
+# Transform the sample to have the correct covariance matrix#
+MC_samp <- MC_samp %*% sqrt_sig#
+cor(MC_samp)#
+sig_mat
+# Sort and take absolute value#
+MC_samp <- abs(MC_samp)#
+MC_samp <- t(apply(MC_samp, 1, sort, decreasing=FALSE))#
+#
+# P-value should be around 0.40497, works.#
+inbounds_vec <- apply(MC_samp, 1, inbounds, bounds=boundaryPts)#
+1- sum(inbounds_vec / length(inbounds_vec))
+#########################################################################
+# Now try it with importance sampling#
+# Calculate weights function#
+calc_weights <- function(sample, const_factor, sig_inv) {#
+	vector_prod <- t(sample) %*% sig_inv %*% sample#
+	numerator <- exp(-vector_prod / 2)#
+	denominator <- (1+vector_prod/nu)^(-(5+nu)/2)#
+	const_factor * numerator / denominator#
+}#
+#
+# The constant factor for calculating weights#
+const_factor <- nu^(5/2) * gamma(nu/2) / (gamma((nu+5)/2) * 2^(5/2))#
+# Check it#
+temp_x <- runif(n=5, min=-2, max=2)#
+dmvnorm(x=temp_x, sigma=sig_mat) / dmvt(x=temp_x, sigma=sig_mat, df=nu, log=F)#
+calc_weights(temp_x, const_factor, solve(sig_mat))
+# Generate sample from multivariate t#
+n <- 10000#
+nu <- 4#
+norm_samp <- rmvnorm(n=n, mean=rep(0,5))#
+norm_samp <- norm_samp %*% sqrt_sig#
+chisq_samp <- rchisq(n=n, df=nu)#
+chisq_samp <- sqrt(chisq_samp/nu)#
+t_samp <- norm_samp / chisq_samp#
+#
+# Check we generated multivariate t correctly#
+sample <- rmvt(n=n, sigma=sig_mat, df=nu)#
+apply(t_samp, 2, meanß)#
+(nu / (nu-2)) * sig_mat#
+cov(t_samp)#
+cov(sample)
+# Generate sample from multivariate t#
+n <- 10000#
+nu <- 4#
+norm_samp <- rmvnorm(n=n, mean=rep(0,5))#
+norm_samp <- norm_samp %*% sqrt_sig#
+chisq_samp <- rchisq(n=n, df=nu)#
+chisq_samp <- sqrt(chisq_samp/nu)#
+t_samp <- norm_samp / chisq_samp#
+#
+# Check we generated multivariate t correctly#
+sample <- rmvt(n=n, sigma=sig_mat, df=nu)#
+apply(t_samp, 2, mean)#
+(nu / (nu-2)) * sig_mat#
+cov(t_samp)#
+cov(sample)
+sig_mat
+sig_mat
+# Generate sample from multivariate t#
+n <- 100000#
+nu <- 4#
+norm_samp <- rmvnorm(n=n, mean=rep(0,5))#
+norm_samp <- norm_samp %*% sqrt_sig#
+chisq_samp <- rchisq(n=n, df=nu)#
+chisq_samp <- sqrt(chisq_samp/nu)#
+t_samp <- norm_samp / chisq_samp#
+#
+# Check we generated multivariate t correctly#
+sample <- rmvt(n=n, sigma=sig_mat, df=nu)#
+apply(t_samp, 2, mean)#
+(nu / (nu-2)) * sig_mat#
+cov(t_samp)#
+cov(sample)
+# Calculate sig_inv#
+U <- svd(sig_mat)$u#
+d <- svd(sig_mat)$d#
+V <- svd(sig_mat)$v#
+sig_inv <- U %*% solve(diag(d)) %*% t(V)#
+# Check#
+solve(sig_mat)#
+sig_inv
+# Sort and take absolute value#
+sorted_samp <- abs(t_samp)#
+sorted_samp <- t(apply(sorted_samp, 1, sort, decreasing=FALSE))
+# Go through and check inbounds#
+inbounds_vec <- apply(sorted_samp, 1, inbounds, bounds=boundaryPts)#
+1- sum(inbounds_vec / length(inbounds_vec))#
+#
+# Loop to calculate weights.#
+weights_vec <- rep(0, n)#
+for (i in 1:n) {#
+	if (inbounds_vec[i] == 0)#
+	{#
+		weights_vec[i] <- calc_weights(orig_t_samp[i, ], const_factor, sig_inv)#
+	}#
+}
+# P-value should be around 0.40497, works.#
+sum(weights_vec) / n
+n
+summary(weights_vec)
+# Sort and take absolute value#
+sorted_samp <- abs(t_samp)#
+sorted_samp <- t(apply(sorted_samp, 1, sort, decreasing=FALSE))#
+#
+# Go through and check inbounds#
+inbounds_vec <- apply(sorted_samp, 1, inbounds, bounds=boundaryPts)#
+# Should be higher than the p-value, is the whole point of IS#
+1- sum(inbounds_vec / length(inbounds_vec))#
+#
+# Loop to calculate weights.#
+weights_vec <- rep(0, n)#
+for (i in 1:n) {#
+	if (inbounds_vec[i] == 0)#
+	{#
+		weights_vec[i] <- calc_weights(t_samp[i, ], const_factor, sig_inv)#
+	}#
+}#
+#
+# P-value should be around 0.40497, works.#
+sum(weights_vec) / n
+library(GBJ)
+HC
+rm(list=ls())
+d = 5
+h= d
+# Random correlation matrix#
+start_sig <- matrix(data=0.3, nrow=d, ncol=d)#
+diag(start_sig) <- 1#
+temp_samp <- rmvnorm(n=2*d, sigma=start_sig)#
+random_sig <- cor(temp_samp)#
+#
+# Explicit inverse of HC to find the p-value bounds#
+i_vec <- 1:d#
+HC_p_bounds <- ((2*i_vec+h^2)/d - sqrt((2*i_vec/d+h^2/d)^2 - 4*i_vec^2/d^2 - 4*i_vec^2*h^2/d^3)) /				(2*(1+h^2/d))#
+HC_z_bounds <- qnorm(1-HC_p_bounds/2)#
+HC_z_bounds <- sort(HC_z_bounds, decreasing=F)#
+#
+# qnorm can't handle more precision than 10^-16#
+HC_z_bounds[which(HC_z_bounds > 8.2)]= 8.2
+HC_z_bounds
+lower.tri(random_sig)
+random_sig[upper.tri(random_sig)]
+random_sig
+-0.25860898046535952^(-4.5)
+(-0.25860898046535952)^(-4.5)
+eigen(random_sig)
+solve(random_sig)
+eigen(solve(random_sig))
+x = c(0.61723407813926645, -1.2342965965671524, 0.42891688890056912, -5.1731653575568304, -3.2551115476488026)
+t(x) %*% solve(random_sig) %*% x
+solve(random_sig)
+sig_mat
+random_sig
