@@ -243,7 +243,8 @@ int main(int argc, const char * argv[]) {
     // Second is the filename of the bounds file.
     // Third is the filename of the pairwise correlations file.
     // Fourth is the MC method to use.
-    // Fifth is number of reps
+    // Fifth is nu (DF for multivariate t) - make this any number if not using importance sampling
+    // Sixth is number of reps
     int d = atoi(argv[1]);
     
     // Reserve space for and populate the bounds vector.
@@ -308,12 +309,15 @@ int main(int argc, const char * argv[]) {
     // Choose a method to calculate the pvalue.
     int MCmethod = atoi(argv[4]);
     double p_value = 0.0;
-    
+  
+    // The DF parameter for multivariate t, can be any number if using standard MC. 
+    double nu = atof(argv[5]); 
+
     // How many reps do we want?
     // Generally strategy should be something like: Do 10000,
     // if p-value < 0.01 then do 10^6, if p-value < 0.0001, then do 10^8,
     // and so on.  But program this in at the R level.
-    double num_reps = atof(argv[5]);
+    double num_reps = atof(argv[6]);
     
     /////////////////////////////////////////////////////////
     // Done parsing inputs
@@ -338,7 +342,7 @@ int main(int argc, const char * argv[]) {
             p_value = standardMC(d, num_reps, boundaryPts, sqrt_sig, indep_flag);
             break;
         case 2:									// 2 = importance sampling
-            p_value = iSample(d, 4, num_reps, boundaryPts, sqrt_sig, sig_inv, indep_flag);
+            p_value = iSample(d, nu, num_reps, boundaryPts, sqrt_sig, sig_inv, indep_flag);
             break;
         default:
             std::cerr << "Invalid choice of method!" << std::endl;
