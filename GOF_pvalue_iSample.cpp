@@ -14,11 +14,11 @@
 #include <fstream>					// for file io
 #include <vector>						// for std::vector
 #include <armadillo>
+#include <algorithm>
 #include <ctime>
 #include <cmath>
 #include "inBounds.h"
 #include <random>
-#include <boost/random/chi_squared_distribution.hpp>         // possible speedup if we just generate normals and sum them?
 
 using namespace arma;
 
@@ -85,9 +85,6 @@ double iSample(const int &d,
                const arma::mat &inv_sig,
                const bool &indep_flag)
 {
-    
-    std::vector<double> U_vec(reps);
-    
     // We don't want to generate all the data at the same time, too much to hold in memory.
     // Doing 10^5 at a time takes ~80Mb ram.
     double samp_limit = 10000;
@@ -111,6 +108,8 @@ double iSample(const int &d,
     double num_to_generate;
     double U;
     double temp_weight;
+    arma::rowvec orig_samp;
+    std::vector<double> abs_sorted_samp;
     for (long iii=0; iii<num_its; ++iii)
     {
         // Check how many we need to do this rep.
@@ -137,17 +136,16 @@ double iSample(const int &d,
             // Generate \chisq_nu
             U = distribution(generator);
             
-            U_vec[jjj] = U;
-            
             // Divide our sample by sqrt(U/nu)
-            rowvec orig_samp = correlated_samples.row(jjj);
+            orig_samp = correlated_samples.row(jjj);
             orig_samp = orig_samp / sqrt(U/nu);
             
             // Absolute value, sort, convert to std::vector from arma rowvec.
-            rowvec temp_samp = orig_samp;
-            temp_samp = abs(temp_samp);
-            temp_samp = sort(temp_samp);
-            std::vector<double> abs_sorted_samp = conv_to< std::vector<double> >::from(temp_samp);
+            abs_sorted_samp = conv_to< std::vector<double> >::from(orig_samp);
+            for (int samp_it = 0; samp_it < d; ++samp_it) {
+                abs_sorted_samp[samp_it] = std::abs(abs_sorted_samp[samp_it]);
+            }
+            sort(abs_sorted_samp.begin(), abs_sorted_samp.end());
             
             // inbounds_inf() returns 1 (true) if inside
             inbounds_ind = inbounds_upper_only(bounds, abs_sorted_samp, d);
@@ -191,6 +189,8 @@ double standardMC(const int &d,
     
     // If asked for more than 10^5 reps, loop until we do enough.
     double num_to_generate;
+    arma::rowvec orig_samp;
+    std::vector<double> abs_sorted_samp;
     for (long iii=0; iii<num_its; ++iii)
     {
         // Check how many we need to do this rep.
@@ -214,13 +214,15 @@ double standardMC(const int &d,
         // For each sample: absolute value, sort, and then check with inBounds.h.
         for (int jjj=0; jjj<samp_limit; ++jjj)
         {
-            rowvec temp_samp = correlated_samples.row(jjj);
-            temp_samp = abs(temp_samp);
-            temp_samp = sort(temp_samp);
-            std::vector<double> samp_vector = conv_to< std::vector<double> >::from(temp_samp);
-            
+            orig_samp = correlated_samples.row(jjj);
+            abs_sorted_samp = conv_to< std::vector<double> >::from(orig_samp);
+            for (int samp_it = 0; samp_it < d; ++samp_it) {
+                abs_sorted_samp[samp_it] = std::abs(abs_sorted_samp[samp_it]);
+            }
+            sort(abs_sorted_samp.begin(), abs_sorted_samp.end());
+
             // inbounds_inf() returns 1 (true) if inside
-            p_value += 1.0 - inbounds_upper_only(bounds, samp_vector, d);
+            p_value += 1.0 - inbounds_upper_only(bounds, abs_sorted_samp, d);
         }
     }
     
@@ -319,14 +321,14 @@ int main(int argc, const char * argv[]) {
     
     
     // Sqrt the covariance matrix.
-    mat U;
-    vec s;
-    mat V;
-    svd(U, s, V, sig_mat);
-    mat sqrt_sig = U*diagmat(sqrt(s))*V.t();
+    arma::mat U;
+    arma::vec s;
+    arma::mat V;
+    arma::svd(U, s, V, sig_mat);
+    arma::mat sqrt_sig = U*diagmat(sqrt(s))*V.t();
     
     // Invert the covariance matrix
-    mat sig_inv = U*inv(diagmat(s))*V.t();
+    arma::mat sig_inv = U*inv(diagmat(s))*V.t();
     
     // Random seed before we start MC
     srand(time(NULL));
